@@ -17,6 +17,10 @@
   </head>
   <body>
     <div id="app"></div>
+    <!-- COI service worker: sets Cross-Origin-Opener-Policy + Cross-Origin-Embedder-Policy
+         so SharedArrayBuffer / threaded WASM work on GitHub Pages (which cannot set
+         response headers directly). Must load before the app. See docs/service-worker.md. -->
+    <script src="./coi-serviceworker.js"></script>
     <script type="module" src="/src/main.ts"></script>
   </body>
 </html>

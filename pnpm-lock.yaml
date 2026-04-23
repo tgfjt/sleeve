@@ -11,6 +11,9 @@ importers:
       '@huggingface/transformers':
         specifier: ^3.0.2
         version: 3.8.1
+      coi-serviceworker:
+        specifier: ^0.1.7
+        version: 0.1.7
     devDependencies:
       '@playwright/test':
         specifier: ^1.49.0
@@ -819,6 +822,9 @@ packages:
   clsx@2.1.1:
     resolution: {integrity: sha512-eYm0QWBtUrBWZWG0d386OGAw16Z995PiOVo2B7bjWSbHedGl5e0ZWaq65kOGgUSNesEIDkB9ISbTg/JK9dhCZA==}
     engines: {node: '>=6'}
+
+  coi-serviceworker@0.1.7:
+    resolution: {integrity: sha512-bjSUqEngCPOkErY2vbyWsaIGCNRODYzlNycaREVw5s12/C8SM+RnRUUeX6pZbTtov6C52ZLY/+tvHK+BDxuUuA==}
 
   combined-stream@1.0.8:
     resolution: {integrity: sha512-FQN4MRfuJeHf7cBbBMJFXhKSDq+2kAArBlmRBvcvFE5BB1HZKXtSFASDhdlz9zOYwxh8lDdnvmMOe/+5cdoEdg==}
@@ -1985,6 +1991,8 @@ snapshots:
   chownr@3.0.0: {}
 
   clsx@2.1.1: {}
+
+  coi-serviceworker@0.1.7: {}
 
   combined-stream@1.0.8:
     dependencies:
