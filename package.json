@@ -11,7 +11,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "lint": "prettier --check .",
+    "lint": "oxlint src tests && prettier --check .",
     "format": "prettier --write ."
   },
   "dependencies": {
@@ -23,6 +23,7 @@
     "@tsconfig/svelte": "^5.0.4",
     "@types/node": "^22.10.0",
     "jsdom": "^25.0.0",
+    "oxlint": "^1.61.0",
     "prettier": "^3.4.0",
     "prettier-plugin-svelte": "^3.3.0",
     "svelte": "^5.15.0",
