@@ -19,11 +19,6 @@
       "$lib/*": ["src/lib/*"]
     }
   },
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.svelte",
-    "src/**/*.d.ts",
-    "tests/**/*.ts"
-  ],
+  "include": ["src/**/*.ts", "src/**/*.svelte", "src/**/*.d.ts", "tests/**/*.ts"],
   "exclude": ["node_modules", "dist", "reference"]
 }
