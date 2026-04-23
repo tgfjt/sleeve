@@ -5,3 +5,4 @@ reference
 playwright-report
 test-results
 coverage
+public/coi-serviceworker.js
