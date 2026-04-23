@@ -11,8 +11,8 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "lint": "oxlint src tests && prettier --check .",
-    "format": "prettier --write ."
+    "lint": "oxlint src tests && oxfmt --check . && prettier --check '**/*.{svelte,md,html,yml,yaml}'",
+    "format": "oxfmt . && prettier --write '**/*.{svelte,md,html,yml,yaml}'"
   },
   "dependencies": {
     "@huggingface/transformers": "^3.0.2"
@@ -23,6 +23,7 @@
     "@tsconfig/svelte": "^5.0.4",
     "@types/node": "^22.10.0",
     "jsdom": "^25.0.0",
+    "oxfmt": "^0.46.0",
     "oxlint": "^1.61.0",
     "prettier": "^3.4.0",
     "prettier-plugin-svelte": "^3.3.0",
