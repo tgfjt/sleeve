@@ -15,7 +15,7 @@ t_wada 流にこのリストを上から潰す。各項目の `[ ]` は commit 1
 ### `src/lib/layer.ts`
 
 - [ ] `createTextLayer({id, naturalW, naturalH})` returns default layer (reference:840-853)
-  - size = round(H * 0.28)
+  - size = round(H \* 0.28)
   - x = W/2, y = H/2, font='Anton', color='#ff4d2e', opacity=1, blur=0, letterSpacing=0, maskMode='none'
 - [ ] `linkLayerToMask(layer, maskId, mode)` sets maskId + maskMode; mode='none' clears both
 - [ ] `unlinkLayersFromMask(layers, maskId)` resets layers referencing deleted mask (reference:1193-1195)
@@ -24,15 +24,15 @@ t_wada 流にこのリストを上から潰す。各項目の `[ ]` は commit 1
 ### `src/lib/mask.ts`
 
 - [ ] `sortCandidatesByArea(candidates)` — ascending area → [S, M, L] (reference:736)
-- [ ] `outlineOffset(W, H)` = max(2, round(min(W, H) * 0.003)) (reference:1081)
+- [ ] `outlineOffset(W, H)` = max(2, round(min(W, H) \* 0.003)) (reference:1081)
 - [ ] `defaultSelectedIdx(candidates, prevIdx)` — keep prev if valid, else `length-1` (largest) (reference:740-742)
 
 ### `src/lib/text.ts`
 
-- [ ] `measureLetterSpaced({text, letterSpacing, measure})` returns total width = Σ widths + ls * (n-1) (reference:1118)
+- [ ] `measureLetterSpaced({text, letterSpacing, measure})` returns total width = Σ widths + ls \* (n-1) (reference:1118)
 - [ ] Single-char strings: width = widths[0], no letter-spacing contribution
 - [ ] Empty string: 0
-- [ ] `lineLayout({size, lineCount, y})` returns lineHeight = size * 1.05, startY centered (reference:1108-1109)
+- [ ] `lineLayout({size, lineCount, y})` returns lineHeight = size \* 1.05, startY centered (reference:1108-1109)
 
 ### `src/lib/hit.ts`
 

@@ -16,7 +16,14 @@ describe('buildSamInputs', () => {
       { x: 30, y: 40, label: 0 }
     ];
     expect(buildSamInputs(pts)).toEqual({
-      input_points: [[[[10, 20], [30, 40]]]],
+      input_points: [
+        [
+          [
+            [10, 20],
+            [30, 40]
+          ]
+        ]
+      ],
       input_labels: [[[1, 0]]]
     });
   });
@@ -28,7 +35,11 @@ describe('buildSamInputs', () => {
       { x: 2, y: 2, label: 0 }
     ];
     const out = buildSamInputs(pts);
-    expect(out.input_points[0][0]).toEqual([[3, 3], [1, 1], [2, 2]]);
+    expect(out.input_points[0][0]).toEqual([
+      [3, 3],
+      [1, 1],
+      [2, 2]
+    ]);
     expect(out.input_labels[0][0]).toEqual([1, 1, 0]);
   });
 
