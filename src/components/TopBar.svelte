@@ -25,11 +25,11 @@
 </script>
 
 <header class="topbar" aria-label="SLEEVE toolbar">
-  <div class="brand">
+  <h1 class="brand">
     <span aria-hidden="true" class="brand-mark"></span>
     <span class="brand-name">SLEEVE</span>
     <span class="sub">v0.1 / COVER MAKER</span>
-  </div>
+  </h1>
   <div class="actions">
     <button type="button" class="btn" onclick={requestReset}>Reset</button>
     <button type="button" class="btn primary" onclick={exportPNG} disabled={!app.image}
