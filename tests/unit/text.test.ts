@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
 import { layoutLines, measureLetterSpaced } from '../../src/lib/text';
 
-describe('measureLetterSpaced', () => {
-  const measure = (c: string) => c.length * 10; // each char is 10px wide
+const measure = (c: string) => c.length * 10; // each char is 10px wide
 
+describe('measureLetterSpaced', () => {
   it('single-char width has no letter-spacing contribution', () => {
     expect(measureLetterSpaced('A', 5, measure)).toEqual({
       total: 10,

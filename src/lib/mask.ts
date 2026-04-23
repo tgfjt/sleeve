@@ -12,7 +12,7 @@ export type SavedMask<C = HTMLCanvasElement> = {
 };
 
 export function sortCandidatesByArea<C>(candidates: MaskCandidate<C>[]): MaskCandidate<C>[] {
-  return [...candidates].sort((a, b) => a.area - b.area);
+  return candidates.toSorted((a, b) => a.area - b.area);
 }
 
 export function defaultSelectedIdx(total: number, prev: number | null): number {
