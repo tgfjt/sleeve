@@ -36,8 +36,21 @@
     }
   }
 
-  function thumbStyle(cand: { canvas: HTMLCanvasElement }): string {
-    return `background-image: url(${cand.canvas.toDataURL()})`;
+  // ImageBitmap doesn't expose toDataURL directly; draw to a tiny canvas
+  // once per bitmap and cache the resulting data URL so re-renders don't
+  // re-encode.
+  const thumbURLs = new WeakMap<ImageBitmap, string>();
+  function thumbStyle(cand: { canvas: ImageBitmap }): string {
+    let url = thumbURLs.get(cand.canvas);
+    if (!url) {
+      const c = document.createElement('canvas');
+      c.width = cand.canvas.width;
+      c.height = cand.canvas.height;
+      c.getContext('2d')!.drawImage(cand.canvas, 0, 0);
+      url = c.toDataURL();
+      thumbURLs.set(cand.canvas, url);
+    }
+    return `background-image: url(${url})`;
   }
 </script>
 

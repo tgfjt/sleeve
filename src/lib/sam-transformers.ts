@@ -5,15 +5,13 @@ import { buildSamInputs, type SamPoint } from './sam-inputs';
 
 const MODEL_ID = 'Xenova/slimsam-77-uniform';
 
-function buildMaskCanvas(
+function buildMaskBitmap(
   maskBits: Uint8Array | Uint8ClampedArray | Int8Array,
   W: number,
   H: number,
   offset: number
-): { canvas: HTMLCanvasElement; area: number } {
-  const canvas = document.createElement('canvas');
-  canvas.width = W;
-  canvas.height = H;
+): { canvas: ImageBitmap; area: number } {
+  const canvas = new OffscreenCanvas(W, H);
   const ctx = canvas.getContext('2d')!;
   const imgData = ctx.createImageData(W, H);
   const perMask = W * H;
@@ -27,7 +25,7 @@ function buildMaskCanvas(
     if (v) area++;
   }
   ctx.putImageData(imgData, 0, 0);
-  return { canvas, area };
+  return { canvas: canvas.transferToImageBitmap(), area };
 }
 
 export async function createTransformersSamBackend(): Promise<SamBackend> {
@@ -81,7 +79,7 @@ export async function createTransformersSamBackend(): Promise<SamBackend> {
 
       const candidates: MaskCandidate[] = [];
       for (let k = 0; k < numMasks; k++) {
-        const { canvas, area } = buildMaskCanvas(maskData, W, H, k * perMask);
+        const { canvas, area } = buildMaskBitmap(maskData, W, H, k * perMask);
         candidates.push({ canvas, score: scores[k], area });
       }
       return candidates;

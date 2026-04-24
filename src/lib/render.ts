@@ -58,7 +58,7 @@ export function drawSubjectForeground(
 
 export function drawMaskOverlay(
   dst: CanvasRenderingContext2D,
-  maskCanvas: HTMLCanvasElement,
+  maskCanvas: CanvasImageSource,
   W: number,
   H: number,
   fill: string
@@ -76,7 +76,7 @@ export function drawMaskOverlay(
 
 export function drawMaskOutline(
   dst: CanvasRenderingContext2D,
-  maskCanvas: HTMLCanvasElement,
+  maskCanvas: CanvasImageSource,
   W: number,
   H: number,
   color: string,
