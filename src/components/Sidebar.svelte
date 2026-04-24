@@ -5,8 +5,8 @@
   import MaskList from './MaskList.svelte';
 
   async function loadProductionSam() {
-    const mod = await import('../lib/sam-transformers');
-    return mod.createTransformersSamBackend();
+    const mod = await import('../lib/sam-worker');
+    return mod.createWorkerSamBackend();
   }
 
   let dragOver = $state(false);
