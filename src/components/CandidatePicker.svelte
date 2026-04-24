@@ -1,5 +1,6 @@
 <script lang="ts">
   import { app } from '../state.svelte';
+  import CandidateThumb from './CandidateThumb.svelte';
 
   const labels = ['S', 'M', 'L'];
 
@@ -35,23 +36,6 @@
       choose(idx);
     }
   }
-
-  // ImageBitmap doesn't expose toDataURL directly; draw to a tiny canvas
-  // once per bitmap and cache the resulting data URL so re-renders don't
-  // re-encode.
-  const thumbURLs = new WeakMap<ImageBitmap, string>();
-  function thumbStyle(cand: { canvas: ImageBitmap }): string {
-    let url = thumbURLs.get(cand.canvas);
-    if (!url) {
-      const c = document.createElement('canvas');
-      c.width = cand.canvas.width;
-      c.height = cand.canvas.height;
-      c.getContext('2d')!.drawImage(cand.canvas, 0, 0);
-      url = c.toDataURL();
-      thumbURLs.set(cand.canvas, url);
-    }
-    return `background-image: url(${url})`;
-  }
 </script>
 
 {#if app.pending.active && app.pending.candidates.length > 0}
@@ -72,7 +56,7 @@
         >
           <span class="size-label" aria-hidden="true">{labels[idx] ?? idx + 1}</span>
           <span class="badge" aria-hidden="true">{(cand.score * 100).toFixed(0)}%</span>
-          <span class="thumb-bg" aria-hidden="true" style={thumbStyle(cand)}></span>
+          <CandidateThumb bitmap={cand.canvas} />
         </button>
       {/each}
     </div>
@@ -123,12 +107,6 @@
   }
   .thumb.active {
     border-color: var(--accent);
-  }
-  .thumb-bg {
-    position: absolute;
-    inset: 0;
-    background-size: cover;
-    background-position: center;
   }
   .badge {
     position: absolute;
