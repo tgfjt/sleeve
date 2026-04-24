@@ -1,10 +1,15 @@
-export type MaskCandidate<C = HTMLCanvasElement> = {
+/**
+ * Default to ImageBitmap because the Worker-based SAM backend returns
+ * those (transferable across the postMessage boundary). The type stays
+ * generic so unit tests can substitute a simple stand-in without DOM.
+ */
+export type MaskCandidate<C = ImageBitmap> = {
   canvas: C;
   score: number;
   area: number;
 };
 
-export type SavedMask<C = HTMLCanvasElement> = {
+export type SavedMask<C = ImageBitmap> = {
   id: number;
   name: string;
   canvas: C;
