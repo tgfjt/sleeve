@@ -43,8 +43,9 @@ export async function createWorkerSamBackend(): Promise<SamBackend> {
 
     async segment(points: SamPoint[]): Promise<MaskCandidate[]> {
       // structuredClone (and postMessage) can't clone Svelte 5 $state
-      // proxies, so flatten to plain objects before crossing the boundary.
-      const plain = points.map((p) => ({ x: p.x, y: p.y, label: p.label }));
+      // proxies. JSON roundtrip is the bulletproof way to force a plain
+      // data tree regardless of how points was produced.
+      const plain = JSON.parse(JSON.stringify(points)) as SamPoint[];
       const res = await request({ type: 'segment', points: plain }, 'candidates');
       return res.candidates.map((c) => ({
         canvas: c.bitmap,
