@@ -19,7 +19,7 @@
     >
   {/if}
   <span class="spacer"></span>
-  <span>MODEL: EdgeTAM (onnx-community)</span>
+  <span>MODEL: EdgeTAM (onnx-community){app.backend ? ` · ${app.backend}` : ''}</span>
 </footer>
 
 <style>

@@ -1,4 +1,5 @@
 import type { MaskCandidate } from './mask';
+import { app } from '../state.svelte';
 import type { SamBackend } from './sam';
 import type { SamPoint } from './sam-inputs';
 import { DEFAULT_MODEL_ID, type WorkerRequest, type WorkerResponse } from '../workers/sam.worker';
@@ -43,7 +44,13 @@ export async function createWorkerSamBackend(): Promise<SamBackend> {
       const modelId = q.get('model') ?? DEFAULT_MODEL_ID;
       const dtype = q.get('dtype') === 'fp32' ? 'fp32' : 'fp16';
       const res = await request({ type: 'prepare', bitmap, modelId, dtype }, 'prepared', [bitmap]);
-      console.log('[sam] prepare timings (ms)', JSON.stringify(res.timings));
+      console.log(
+        '[sam] backend:',
+        res.backend,
+        'prepare timings (ms)',
+        JSON.stringify(res.timings)
+      );
+      app.backend = res.backend;
     },
 
     async segment(points: SamPoint[]): Promise<MaskCandidate[]> {

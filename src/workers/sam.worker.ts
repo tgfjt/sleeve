@@ -16,7 +16,7 @@ export type WorkerRequest =
   | { type: 'segment'; points: SamPoint[] };
 
 export type WorkerResponse =
-  | { type: 'prepared'; timings: Record<string, number> }
+  | { type: 'prepared'; timings: Record<string, number>; backend: string }
   | {
       type: 'candidates';
       candidates: Array<{ bitmap: ImageBitmap; score: number; area: number }>;
@@ -56,6 +56,7 @@ type MaskModel = {
 };
 
 let model: MaskModel | null = null;
+let backend = '';
 let processor: ProcessorWithPostProcess | null = null;
 // Everything per-image is computed once in `prepare`: preprocessing
 // (resize/normalize to 1024px), the vision encoder, and the size metadata
@@ -75,9 +76,11 @@ async function ensureModel(modelId: string, dtype: 'fp16' | 'fp32'): Promise<voi
       dtype,
       device
     })) as unknown as MaskModel;
+    backend = `${device} ${dtype}`;
   } catch (err) {
-    console.warn('[sam.worker] webgpu init failed, retrying defaults:', err);
+    const message = err instanceof Error ? err.message : String(err);
     model = (await AutoModelForMaskGeneration.from_pretrained(modelId)) as unknown as MaskModel;
+    backend = `fallback (${device} ${dtype} failed: ${message})`;
   }
   processor = (await AutoProcessor.from_pretrained(modelId)) as unknown as ProcessorWithPostProcess;
 }
@@ -137,7 +140,7 @@ self.addEventListener('message', async (event: MessageEvent<WorkerRequest>) => {
       const embeddings = await model!.get_image_embeddings({ pixel_values });
       t.encoder = Math.round(performance.now() - t.encoder);
       prepared = { embeddings, original_sizes, reshaped_input_sizes };
-      post({ type: 'prepared', timings: t });
+      post({ type: 'prepared', timings: t, backend });
       return;
     }
     if (req.type === 'segment') {
