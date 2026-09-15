@@ -29,3 +29,13 @@ export function defaultSelectedIdx(total: number, prev: number | null): number {
 export function outlineOffset(width: number, height: number): number {
   return Math.max(2, Math.round(Math.min(width, height) * 0.003));
 }
+
+/**
+ * Map a SAM mask logit to an 8-bit alpha. Logit 0 is the model's decision
+ * boundary; the sigmoid gives a ~2px anti-aliased edge instead of the
+ * jagged step you get from binarizing.
+ */
+export function logitToAlpha(logit: number): number {
+  // ponytail: fixed slope 2; expose if edges need to be harder/softer
+  return Math.round(255 / (1 + Math.exp(-2 * logit)));
+}
