@@ -86,7 +86,7 @@
         active: true,
         points: [{ x: p.x, y: p.y, label: 1 }],
         candidates: [],
-        selectedIdx: 0
+        selectedIdx: -1
       };
     } else {
       app.pending.points = [...app.pending.points, { x: p.x, y: p.y, label }];

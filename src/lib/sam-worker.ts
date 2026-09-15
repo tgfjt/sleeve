@@ -1,7 +1,7 @@
 import type { MaskCandidate } from './mask';
 import type { SamBackend } from './sam';
 import type { SamPoint } from './sam-inputs';
-import type { WorkerRequest, WorkerResponse } from '../workers/sam.worker';
+import { DEFAULT_MODEL_ID, type WorkerRequest, type WorkerResponse } from '../workers/sam.worker';
 
 /**
  * Spawns the SAM pipeline in a dedicated Worker and proxies the
@@ -38,7 +38,12 @@ export async function createWorkerSamBackend(): Promise<SamBackend> {
     async prepareImage(source: string | Blob): Promise<void> {
       const blob = typeof source === 'string' ? await (await fetch(source)).blob() : source;
       const bitmap = await createImageBitmap(blob);
-      await request({ type: 'prepare', bitmap }, 'prepared', [bitmap]);
+      // ?model=<hf id>&dtype=fp32 for A/B testing models from the address bar
+      const q = new URLSearchParams(location.search);
+      const modelId = q.get('model') ?? DEFAULT_MODEL_ID;
+      const dtype = q.get('dtype') === 'fp32' ? 'fp32' : 'fp16';
+      const res = await request({ type: 'prepare', bitmap, modelId, dtype }, 'prepared', [bitmap]);
+      console.log('[sam] prepare timings (ms)', JSON.stringify(res.timings));
     },
 
     async segment(points: SamPoint[]): Promise<MaskCandidate[]> {
@@ -47,6 +52,7 @@ export async function createWorkerSamBackend(): Promise<SamBackend> {
       // data tree regardless of how points was produced.
       const plain = JSON.parse(JSON.stringify(points)) as SamPoint[];
       const res = await request({ type: 'segment', points: plain }, 'candidates');
+      console.log('[sam] segment timings (ms)', JSON.stringify(res.timings));
       return res.candidates.map((c) => ({
         canvas: c.bitmap,
         score: c.score,
