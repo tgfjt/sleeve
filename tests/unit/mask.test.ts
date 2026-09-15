@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import {
   defaultSelectedIdx,
+  logitToAlpha,
   outlineOffset,
   sortCandidatesByArea,
   type MaskCandidate
@@ -56,5 +57,20 @@ describe('outlineOffset', () => {
   it('floors at 2 for small images', () => {
     expect(outlineOffset(100, 100)).toBe(2); // round(0.3) = 0, floored to 2
     expect(outlineOffset(500, 800)).toBe(2); // round(1.5) = 2
+  });
+});
+
+describe('logitToAlpha', () => {
+  it('maps logit 0 (the decision boundary) to half alpha', () => {
+    expect(logitToAlpha(0)).toBe(128);
+  });
+
+  it('saturates far from the boundary', () => {
+    expect(logitToAlpha(20)).toBe(255);
+    expect(logitToAlpha(-20)).toBe(0);
+  });
+
+  it('is monotonic', () => {
+    expect(logitToAlpha(-1)).toBeLessThan(logitToAlpha(1));
   });
 });
