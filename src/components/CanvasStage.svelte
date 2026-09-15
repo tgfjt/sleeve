@@ -21,25 +21,8 @@
     renderCanvas();
   });
 
+  // Every app.* read inside renderCanvas is tracked by this effect.
   $effect(() => {
-    // Subscribe to all observable bits that affect the canvas render.
-    void app.layers.length;
-    void app.masks.length;
-    void app.pending.active;
-    void app.pending.selectedIdx;
-    app.layers.forEach((l) => {
-      void l.x;
-      void l.y;
-      void l.text;
-      void l.size;
-      void l.color;
-      void l.font;
-      void l.opacity;
-      void l.blur;
-      void l.letterSpacing;
-      void l.maskMode;
-      void l.maskId;
-    });
     if (app.image && stage) renderCanvas();
   });
 
