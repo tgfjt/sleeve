@@ -39,6 +39,13 @@ export function renderTextLayer(ctx: CanvasRenderingContext2D, layer: TextLayer)
   ctx.restore();
 }
 
+// Masked foreground per (mask, image). Built once, reused every frame so
+// dragging text doesn't re-composite a full-resolution canvas per layer.
+const foregroundCache = new WeakMap<
+  CanvasImageSource,
+  { image: CanvasImageSource; fg: HTMLCanvasElement }
+>();
+
 export function drawSubjectForeground(
   dst: CanvasRenderingContext2D,
   image: CanvasImageSource,
@@ -46,14 +53,19 @@ export function drawSubjectForeground(
   W: number,
   H: number
 ): void {
-  const fg = document.createElement('canvas');
-  fg.width = W;
-  fg.height = H;
-  const fctx = fg.getContext('2d')!;
-  fctx.drawImage(mask.canvas, 0, 0, W, H);
-  fctx.globalCompositeOperation = 'source-in';
-  fctx.drawImage(image, 0, 0, W, H);
-  dst.drawImage(fg, 0, 0);
+  let entry = foregroundCache.get(mask.canvas);
+  if (!entry || entry.image !== image) {
+    const fg = document.createElement('canvas');
+    fg.width = W;
+    fg.height = H;
+    const fctx = fg.getContext('2d')!;
+    fctx.drawImage(mask.canvas, 0, 0, W, H);
+    fctx.globalCompositeOperation = 'source-in';
+    fctx.drawImage(image, 0, 0, W, H);
+    entry = { image, fg };
+    foregroundCache.set(mask.canvas, entry);
+  }
+  dst.drawImage(entry.fg, 0, 0);
 }
 
 export function drawMaskOverlay(
