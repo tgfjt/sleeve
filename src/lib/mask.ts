@@ -32,10 +32,12 @@ export function outlineOffset(width: number, height: number): number {
 
 /**
  * Map a SAM mask logit to an 8-bit alpha. Logit 0 is the model's decision
- * boundary; the sigmoid gives a ~2px anti-aliased edge instead of the
- * jagged step you get from binarizing.
+ * boundary; a steep sigmoid anti-aliases the edge without leaving the
+ * interior semi-transparent where the model is merely unsure.
+ * Slope 8: only |logit| < ~0.4 lands between 5% and 95% alpha. Slope 2 was
+ * too soft — low-confidence pixels inside a subject showed as speckles.
  */
+export const LOGIT_SLOPE = 8;
 export function logitToAlpha(logit: number): number {
-  // ponytail: fixed slope 2; expose if edges need to be harder/softer
-  return Math.round(255 / (1 + Math.exp(-2 * logit)));
+  return Math.round(255 / (1 + Math.exp(-LOGIT_SLOPE * logit)));
 }

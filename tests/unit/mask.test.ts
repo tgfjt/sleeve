@@ -73,4 +73,9 @@ describe('logitToAlpha', () => {
   it('is monotonic', () => {
     expect(logitToAlpha(-1)).toBeLessThan(logitToAlpha(1));
   });
+
+  it('keeps unsure-but-inside pixels nearly opaque (no interior speckle)', () => {
+    expect(logitToAlpha(0.5)).toBeGreaterThan(245);
+    expect(logitToAlpha(-0.5)).toBeLessThan(10);
+  });
 });

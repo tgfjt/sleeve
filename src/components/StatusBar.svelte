@@ -19,7 +19,7 @@
     >
   {/if}
   <span class="spacer"></span>
-  <span>MODEL: EdgeTAM (onnx-community){app.backend ? ` · ${app.backend}` : ''}</span>
+  <span>MODEL: slimsam-77-uniform (Xenova){app.backend ? ` · ${app.backend}` : ''}</span>
 </footer>
 
 <style>

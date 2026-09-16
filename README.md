@@ -28,11 +28,12 @@ YouTube サムネでよく見る「機材やバンドメンバーがタイトル
 
 ## 技術スタック
 
-- Segmentation: [EdgeTAM](https://huggingface.co/onnx-community/EdgeTAM-ONNX) via [Transformers.js v3](https://github.com/huggingface/transformers.js)
-  - SAM2 系の軽量モデル。fp16 で約 20MB（以前使っていた SlimSAM-77 と同サイズ）
+- Segmentation: [SlimSAM-77-uniform](https://huggingface.co/Xenova/slimsam-77-uniform) via [Transformers.js v3](https://github.com/huggingface/transformers.js)
+  - 元の SAM (632M params) を 5.5M まで蒸留した軽量版。fp16 で約 21MB
   - WebGPU 対応ブラウザなら GPU で、それ以外は WASM で動く
   - 画像ごとに vision encoder を 1 回だけ回し、クリックごとは decoder のみ（数十 ms）
-  - `?model=Xenova/slimsam-77-uniform&dtype=fp32` のように URL で別モデルを試せる
+  - `?model=onnx-community/EdgeTAM-ONNX&dtype=fp32` のように URL で別モデルを試せる
+  - EdgeTAM / SAM2.1-hiera-tiny も試したが、雪山写真で人物のスコアが低く山を判定できなかったので SlimSAM に戻した
 - Rendering: Canvas 2D API
   - `source-in` composite で被写体マスクから前景切り抜きを作成
   - テキスト → 画像前景の順に重ねることで「後ろ回り込み」を実現

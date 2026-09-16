@@ -8,8 +8,11 @@ import {
 import { logitToAlpha } from '../lib/mask';
 import { buildSamInputs, type SamPoint } from '../lib/sam-inputs';
 
-// EdgeTAM: same download size as SlimSAM-77 (~20MB fp16) with SAM2's decoder.
-export const DEFAULT_MODEL_ID = 'onnx-community/EdgeTAM-ONNX';
+// SlimSAM-77 (SAM1 family, ~21MB fp16). Measured on a snowy mountain photo:
+// EdgeTAM and SAM2.1-hiera-tiny both scored the climber ~0.4-0.8 and could
+// not segment the mountains at all (98% of the "L" mask semi-transparent),
+// while SlimSAM scored 0.86-0.93 on both. Still swappable via ?model=.
+export const DEFAULT_MODEL_ID = 'Xenova/slimsam-77-uniform';
 
 export type WorkerRequest =
   | { type: 'prepare'; bitmap: ImageBitmap; modelId: string; dtype: 'fp16' | 'fp32' }
