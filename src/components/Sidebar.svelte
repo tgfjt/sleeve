@@ -23,7 +23,7 @@
     app.naturalH = img.naturalHeight;
 
     if (!app.sam) {
-      showLoader('Loading SAM model (first time only, ~80MB)...');
+      showLoader('Loading SAM model (first time only, ~20MB)...');
       setStatus('loading', 'loading model');
       app.sam = await resolveSamBackend(loadProductionSam);
     }

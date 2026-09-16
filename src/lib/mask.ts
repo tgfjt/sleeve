@@ -29,3 +29,15 @@ export function defaultSelectedIdx(total: number, prev: number | null): number {
 export function outlineOffset(width: number, height: number): number {
   return Math.max(2, Math.round(Math.min(width, height) * 0.003));
 }
+
+/**
+ * Map a SAM mask logit to an 8-bit alpha. Logit 0 is the model's decision
+ * boundary; a steep sigmoid anti-aliases the edge without leaving the
+ * interior semi-transparent where the model is merely unsure.
+ * Slope 8: only |logit| < ~0.4 lands between 5% and 95% alpha. Slope 2 was
+ * too soft — low-confidence pixels inside a subject showed as speckles.
+ */
+export const LOGIT_SLOPE = 8;
+export function logitToAlpha(logit: number): number {
+  return Math.round(255 / (1 + Math.exp(-LOGIT_SLOPE * logit)));
+}

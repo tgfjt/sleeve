@@ -17,10 +17,15 @@
   function exportPNG() {
     const canvas = document.getElementById('stage') as HTMLCanvasElement | null;
     if (!canvas || !app.image) return;
-    const link = document.createElement('a');
-    link.download = exportFilename();
-    link.href = canvas.toDataURL('image/png');
-    link.click();
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.download = exportFilename();
+      link.href = url;
+      link.click();
+      URL.revokeObjectURL(url);
+    }, 'image/png');
   }
 </script>
 

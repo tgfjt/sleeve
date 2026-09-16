@@ -5,7 +5,7 @@ import type { SamPoint } from './sam-inputs';
  * Runtime-swappable segmentation backend. Production uses the
  * Transformers.js / SlimSAM implementation in `sam-transformers.ts`;
  * E2E tests inject a stub via `window.__SLEEVE_SAM_STUB__` so the
- * 80MB model download stays out of CI.
+ * model download stays out of CI.
  */
 export type SamBackend = {
   prepareImage(source: string | Blob): Promise<void>;

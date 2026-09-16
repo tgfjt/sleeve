@@ -17,7 +17,7 @@ YouTube サムネでよく見る「機材やバンドメンバーがタイトル
 
 1. ブラウザで開く（Chrome / Edge 推奨）
 2. 画像をドロップ or 選択
-3. 初回のみ SAM モデル（~80MB）がダウンロードされる。以後はブラウザキャッシュ
+3. 初回のみ SAM モデル（~20MB）がダウンロードされる。以後はブラウザキャッシュ
 4. 画像をクリック → 選択範囲が赤いオーバーレイで表示、候補サムネが3つ出る（S/M/L）
 5. Shift+クリック で範囲に追加、Alt+クリック で範囲から削る
 6. 狙い通りになったら Confirm ✓
@@ -29,8 +29,11 @@ YouTube サムネでよく見る「機材やバンドメンバーがタイトル
 ## 技術スタック
 
 - Segmentation: [SlimSAM-77-uniform](https://huggingface.co/Xenova/slimsam-77-uniform) via [Transformers.js v3](https://github.com/huggingface/transformers.js)
-  - 元の SAM (632M params) を 5.5M まで蒸留した軽量版
+  - 元の SAM (632M params) を 5.5M まで蒸留した軽量版。fp16 で約 21MB
   - WebGPU 対応ブラウザなら GPU で、それ以外は WASM で動く
+  - 画像ごとに vision encoder を 1 回だけ回し、クリックごとは decoder のみ（数十 ms）
+  - `?model=onnx-community/EdgeTAM-ONNX&dtype=fp32` のように URL で別モデルを試せる
+  - EdgeTAM / SAM2.1-hiera-tiny も試したが、雪山写真で人物のスコアが低く山を判定できなかったので SlimSAM に戻した
 - Rendering: Canvas 2D API
   - `source-in` composite で被写体マスクから前景切り抜きを作成
   - テキスト → 画像前景の順に重ねることで「後ろ回り込み」を実現
@@ -64,8 +67,8 @@ SAM は常に「細部 / 中サイズ / 全体」の3マスクを返すので、
 
 ## 制限
 
-- SlimSAM の精度なので、髪の毛の産毛や細い棒状のもの等は苦手
-- 初回モデルロードが重い（~80MB + WASM/WebGPU 初期化）
+- 髪の毛の産毛や細い棒状のものは苦手（マスク境界はシグモイドで滑らかにしている）
+- 初回モデルロードが重い（~20MB + WASM/WebGPU 初期化）
 - Chrome / Edge 以外は WebGPU が効かず遅い（WASM フォールバックは動く）
 - 書き出しは PNG のみ、サイズは元画像の解像度そのまま
 

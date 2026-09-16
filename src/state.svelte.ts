@@ -34,6 +34,7 @@ export type AppState = {
   nextMaskId: number;
   nextLayerId: number;
   status: { kind: StatusKind; text: string };
+  backend: string;
   loader: LoaderState;
   dialog: DialogState;
 };
@@ -51,6 +52,7 @@ export const app: AppState = $state({
   nextMaskId: 1,
   nextLayerId: 1,
   status: { kind: 'idle', text: 'idle · upload an image' },
+  backend: '',
   loader: { visible: false, message: '' },
   dialog: { kind: 'none' }
 });
